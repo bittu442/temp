@@ -30,14 +30,23 @@ function generateArray() {
 }
 
 
+
 function renderArray(array) {
+    arrayContainer.innerHTML = ""; // Clear the previous content
     array.forEach(value => {
+        const barContainer = document.createElement("div");
+        barContainer.className = "bar-container";
+
         const bar = document.createElement("div");
         bar.style.height = `${value * 3}px`;
         bar.className = "bar";
-        arrayContainer.appendChild(bar);
+        bar.textContent = value; // Display the array value
+
+        barContainer.appendChild(bar);
+        arrayContainer.appendChild(barContainer);
     });
 }
+
 
 async function selectionSort() {
     const array = generateArray();
@@ -55,6 +64,7 @@ async function selectionSort() {
     }
 }
 
+
 async function swap(array, a, b) {
     await new Promise((resolve) => setTimeout(resolve, 50));
     const temp = array[a];
@@ -64,4 +74,10 @@ async function swap(array, a, b) {
     const bars = document.querySelectorAll(".bar");
     bars[a].style.height = `${array[a] * 3}px`;
     bars[b].style.height = `${array[b] * 3}px`;
+
+    // Swap the text content as well
+    const tempText = bars[a].textContent;
+    bars[a].textContent = bars[b].textContent;
+    bars[b].textContent = tempText;
 }
+

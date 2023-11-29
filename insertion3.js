@@ -32,13 +32,17 @@ function generateArray() {
 
 
 function renderArray(array) {
+    arrayContainer.innerHTML = ""; // Clear the previous content
     array.forEach(value => {
         const bar = document.createElement("div");
         bar.style.height = `${value * 3}px`;
         bar.className = "bar";
+        bar.textContent = value; // Display the array value within the bar
         arrayContainer.appendChild(bar);
     });
 }
+
+
 
 async function insertionSort() {
     const array = generateArray();
@@ -67,4 +71,9 @@ async function swap(array, a, b) {
     const bars = document.querySelectorAll(".bar");
     bars[a].style.height = `${array[a] * 3}px`;
     bars[b].style.height = `${array[b] * 3}px`;
+
+    // Swap the text content as well
+    const tempText = bars[a].textContent;
+    bars[a].textContent = bars[b].textContent;
+    bars[b].textContent = tempText;
 }

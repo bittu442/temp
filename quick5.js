@@ -1,3 +1,4 @@
+
 const arrayContainer = document.getElementById("arrayContainer");
 
 function generateArray() {
@@ -33,23 +34,24 @@ function renderArray(array) {
     array.forEach(value => {
         const bar = document.createElement("div");
         bar.style.height = `${value * 3}px`;
+        bar.textContent = value; // Display the array value inside the bar
         bar.className = "bar";
         arrayContainer.appendChild(bar);
     });
 }
 
-
-
 async function quickSort() {
     const array = generateArray();
-    await performQuickSort(array, 0, array.length - 1);
+    await sort(array, 0, array.length - 1);
 }
 
-async function performQuickSort(array, low, high) {
+async function sort(array, low, high) {
     if (low < high) {
         const pivotIndex = await partition(array, low, high);
-        await performQuickSort(array, low, pivotIndex - 1);
-        await performQuickSort(array, pivotIndex + 1, high);
+        await Promise.all([
+            sort(array, low, pivotIndex - 1),
+            sort(array, pivotIndex + 1, high)
+        ]);
     }
 }
 
@@ -57,8 +59,8 @@ async function partition(array, low, high) {
     const pivot = array[high];
     let i = low - 1;
 
-    for (let j = low; j <= high - 1; j++) {
-        if (array[j] < pivot) {
+    for (let j = low; j < high; j++) {
+        if (array[j] <= pivot) {
             i++;
             await swap(array, i, j);
         }
@@ -68,7 +70,6 @@ async function partition(array, low, high) {
     return i + 1;
 }
 
-// Add this function to your code
 async function swap(array, a, b) {
     await new Promise((resolve) => setTimeout(resolve, 50));
     const temp = array[a];
@@ -78,5 +79,9 @@ async function swap(array, a, b) {
     const bars = document.querySelectorAll(".bar");
     bars[a].style.height = `${array[a] * 3}px`;
     bars[b].style.height = `${array[b] * 3}px`;
-}
 
+    // Swap the text content as well
+    const tempText = bars[a].textContent;
+    bars[a].textContent = bars[b].textContent;
+    bars[b].textContent = tempText;
+}

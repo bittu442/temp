@@ -1,8 +1,6 @@
 
 const arrayContainer = document.getElementById("arrayContainer");
 
-
-
 function generateArray() {
     arrayContainer.innerHTML = "";
     const arraySizeInput = document.getElementById("arraySize");
@@ -12,7 +10,6 @@ function generateArray() {
     let array;
 
     if (manualInput) {
-        // Use manually entered values if provided
         array = manualInput.split(',').map(num => parseInt(num));
         if (array.length !== arraySize) {
             const errorMessage = document.getElementById("errorMessage");
@@ -20,11 +17,9 @@ function generateArray() {
             return;
         }
     } else {
-        // Generate a random array if no manual input
         array = generateRandomArray(arraySize);
     }
 
-    // Clear any previous error message
     const errorMessage = document.getElementById("errorMessage");
     errorMessage.textContent = "";
 
@@ -32,17 +27,15 @@ function generateArray() {
     return array;
 }
 
-
 function renderArray(array) {
     array.forEach(value => {
         const bar = document.createElement("div");
         bar.style.height = `${value * 3}px`;
-        bar.textContent = value; // Display the array value inside the bar
+        bar.textContent = value;
         bar.className = "bar";
         arrayContainer.appendChild(bar);
     });
 }
-
 
 async function bubbleSort() {
     const array = generateArray();
@@ -55,6 +48,40 @@ async function bubbleSort() {
     }
 }
 
+async function heapSort() {
+    const array = generateArray();
+    const n = array.length;
+
+    // Build max heap
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+        await heapify(array, n, i);
+    }
+
+    // One by one extract elements from the heap
+    for (let i = n - 1; i > 0; i--) {
+        await swap(array, 0, i); // Move current root to end
+        await heapify(array, i, 0); // Call max heapify on the reduced heap
+    }
+}
+
+async function heapify(array, n, i) {
+    let largest = i;
+    const left = 2 * i + 1;
+    const right = 2 * i + 2;
+
+    if (left < n && array[left] > array[largest]) {
+        largest = left;
+    }
+
+    if (right < n && array[right] > array[largest]) {
+        largest = right;
+    }
+
+    if (largest !== i) {
+        await swap(array, i, largest);
+        await heapify(array, n, largest);
+    }
+}
 
 async function swap(array, a, b) {
     await new Promise((resolve) => setTimeout(resolve, 50));
@@ -66,13 +93,7 @@ async function swap(array, a, b) {
     bars[a].style.height = `${array[a] * 3}px`;
     bars[b].style.height = `${array[b] * 3}px`;
 
-    // Swap the text content as well
     const tempText = bars[a].textContent;
     bars[a].textContent = bars[b].textContent;
     bars[b].textContent = tempText;
 }
-
-
-
-
-

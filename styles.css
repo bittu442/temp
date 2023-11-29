@@ -38,6 +38,13 @@ h1{
     transition: height 0.2s ease-in-out;
 }
 
+.bar {
+    /* Your existing styling */
+    color: white; /* Add this line to set the text color */
+    text-align: center; /* Optionally center the text */
+}
+
+
 /* Style the input fields and buttons */
 label, input, button {
     margin-bottom: 10px;
